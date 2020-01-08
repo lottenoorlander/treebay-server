@@ -40,7 +40,7 @@ router.post("/login", (req, res, next) => {
         console.error(err);
         res.status(500).send({
           error_code: 0,
-          message: "Something went wrong"
+          message: "Something went wrong with the server"
         });
       });
   }

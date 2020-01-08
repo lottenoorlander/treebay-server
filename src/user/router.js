@@ -47,4 +47,27 @@ router.post("/user", (req, res, next) => {
   }
 });
 
+router.put("/user", auth, (req, res, next) => {
+  const { user } = req;
+
+  User.findByPk(user.id)
+    .then(user => {
+      user
+        .update(req.body)
+        .then(user => res.send(user))
+        .catch(err =>
+          res.status(500).send({
+            error_code: 0,
+            message: "Something went wrong with the server"
+          })
+        );
+    })
+    .catch(err =>
+      res.status(500).send({
+        error_code: 0,
+        message: "Something went wrong with the server"
+      })
+    );
+});
+
 module.exports = router;
