@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express();
+const userRouter = require("./user/router");
+const authRouter = require("./auth/router");
 const port = process.env.PORT || 4000;
 
 const cors = require("cors");
@@ -11,5 +13,7 @@ const bodyParserMiddleWare = bodyParser.json();
 app.use(bodyParserMiddleWare);
 
 app.get("/", (req, res) => res.send("Welcome to Treebay!"));
+app.use(userRouter);
+app.use(authRouter);
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));
