@@ -70,4 +70,26 @@ router.put("/user", auth, (req, res, next) => {
     );
 });
 
+router.delete("/user", auth, (req, res, next) => {
+  const { user } = req;
+
+  User.findByPk(user.id)
+    .then(user => {
+      User.destroy({ where: { id: user.id } })
+        .then(number => res.send({ number }))
+        .catch(error =>
+          res.status(500).send({
+            error_code: 0,
+            message: "Something went wrong with the server"
+          })
+        );
+    })
+    .catch(err =>
+      res.status(500).send({
+        error_code: 0,
+        message: "Something went wrong with the server"
+      })
+    );
+});
+
 module.exports = router;
