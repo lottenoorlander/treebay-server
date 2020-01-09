@@ -12,8 +12,12 @@ const Tree = sequelize.define(
       type: Sequelize.DECIMAL,
       allowNull: false
     },
-    location: {
-      type: Sequelize.GEOGRAPHY,
+    locationX: {
+      type: Sequelize.FLOAT,
+      allowNull: true
+    },
+    locationY: {
+      type: Sequelize.FLOAT,
       allowNull: true
     },
     price: {
@@ -27,4 +31,4 @@ const Tree = sequelize.define(
   }
 );
 
-module.exports = User;
+module.exports = Tree;
