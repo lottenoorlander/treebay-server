@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const Tree = require("./model");
-const auth = require("../auth/middleware");
+const buyerAuth = require("../auth/buyerAuth");
+const sellerAuth = require("../auth/sellerAuth");
 router = new Router();
 
 router.get("/trees", (req, res, next) => {
@@ -18,8 +19,8 @@ router.get("/trees", (req, res, next) => {
     );
 });
 
-router.post("/trees", auth, (req, res, next) => {
-  //   const { user } = req;
+router.post("/trees", sellerAuth, (req, res, next) => {
+  const { user } = req;
   const body = { ...req.body };
 
   if (!body.type || !body.price) {
@@ -33,7 +34,7 @@ router.post("/trees", auth, (req, res, next) => {
       .catch(err =>
         res.status(500).send({
           error_code: 0,
-          message: "Something went wrong"
+          message: "Something went wrong with the server"
         })
       );
   }
@@ -45,9 +46,40 @@ router.get("/tree/:id", (req, res, next) =>
     .catch(err =>
       res.status(500).send({
         error_code: 0,
-        message: "Something went wrong"
+        message: "Something went wrong with the server"
       })
     )
 );
+
+router.put("/tree/:id", sellerAuth, (req, res, next) => {
+  const { user } = req;
+
+  Tree.findByPk(req.params.id)
+    .then(tree => {
+      if (tree.userId === user.id) {
+        tree
+          .update(req.body)
+          .then(tree => res.send(tree))
+          .catch(err =>
+            res.status(500).send({
+              error_code: 0,
+              message: "Something went wrong with the server"
+            })
+          );
+      } else {
+        res.status(400).send({
+          error_code: 6,
+          message:
+            "This is not your post and you are not authorized to edit this"
+        });
+      }
+    })
+    .catch(err =>
+      res.status(500).send({
+        error_code: 0,
+        message: "Something went wrong with the server"
+      })
+    );
+});
 
 module.exports = router;

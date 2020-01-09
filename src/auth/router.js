@@ -2,22 +2,26 @@ const { Router } = require("express");
 const { toJWT } = require("./jwt");
 const router = new Router();
 const bcrypt = require("bcrypt");
-const User = require("../user/model");
+const Buyer = require("../buyer/model");
+const Seller = require("../seller/model");
 
 router.post("/login", (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
+  const sellerOrBuyer = req.body.sellerOrBuyer;
+
   if (!username || !password) {
-    res.status(400).send({
+    rses.status(400).send({
       error_code: 3,
       message: "Please supply a valid username and password"
     });
   } else {
-    User.findOne({
-      where: {
-        username: req.body.username
-      }
-    })
+    [sellerOrBuyer]
+      .findOne({
+        where: {
+          username: req.body.username
+        }
+      })
       .then(entity => {
         if (!entity) {
           res.status(400).send({
