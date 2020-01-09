@@ -1,5 +1,7 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../db");
+const Buyer = require("../buyer/model");
+const Seller = require("../seller/model");
 
 const Tree = sequelize.define(
   "tree",
@@ -26,5 +28,11 @@ const Tree = sequelize.define(
     tableName: "trees"
   }
 );
+
+Tree.belongsTo(Buyer);
+Buyer.hasMany(Tree);
+
+Tree.belongsTo(Seller);
+Seller.hasMany(Tree);
 
 module.exports = Tree;
