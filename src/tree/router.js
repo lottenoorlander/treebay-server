@@ -111,7 +111,7 @@ router.delete("/tree/:id", sellerAuth, (req, res, next) => {
 
 router.get("/trees/bought", buyerAuth, (req, res, next) => {
   const { user } = req;
-  Tree.findAll({ where: tree.buyerId === user.id })
+  Tree.findAll({ where: tree.buyerId === user.id }, { include: [Seller] })
     .then(result => res.send(result))
     .catch(err =>
       res.status(500).send({
@@ -123,7 +123,7 @@ router.get("/trees/bought", buyerAuth, (req, res, next) => {
 
 router.get("/trees/sold", sellerAuth, (req, res, next) => {
   const { user } = req;
-  Tree.findAll({ where: tree.sellerId === user.id })
+  Tree.findAll({ where: tree.sellerId === user.id }, { include: [Buyer] })
     .then(result => res.send(result))
     .catch(err =>
       res.status(500).send({
