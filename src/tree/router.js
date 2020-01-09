@@ -8,8 +8,7 @@ router.get("/trees", (req, res, next) => {
   const limit = req.query.limit || 0;
   const offset = req.query.offset || 0;
 
-  //   return Tree.findAndCountAll({ where: { buyerId: null }, limit, offset})
-  return Tree.findAndCountAll()
+  return Tree.findAndCountAll({ where: { buyerId: null }, limit, offset })
     .then(result => res.send({ trees: result.rows, total: result.count }))
     .catch(err =>
       res.status(500).send({
@@ -56,7 +55,7 @@ router.put("/tree/:id", sellerAuth, (req, res, next) => {
 
   Tree.findByPk(req.params.id)
     .then(tree => {
-      if (tree.userId === user.id) {
+      if (tree.sellerId === user.id && !tree.buyerId) {
         tree
           .update(req.body)
           .then(tree => res.send(tree))
