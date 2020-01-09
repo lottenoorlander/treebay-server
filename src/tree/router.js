@@ -109,4 +109,28 @@ router.delete("/tree/:id", sellerAuth, (req, res, next) => {
     );
 });
 
+router.get("/trees/bought", buyerAuth, (req, res, next) => {
+  const { user } = req;
+  Tree.findAll({ where: tree.buyerId === user.id })
+    .then(result => res.send(result))
+    .catch(err =>
+      res.status(500).send({
+        error_code: 0,
+        message: "Something went wrong with the server"
+      })
+    );
+});
+
+router.get("/trees/sold", sellerAuth, (req, res, next) => {
+  const { user } = req;
+  Tree.findAll({ where: tree.sellerId === user.id })
+    .then(result => res.send(result))
+    .catch(err =>
+      res.status(500).send({
+        error_code: 0,
+        message: "Something went wrong with the server"
+      })
+    );
+});
+
 module.exports = router;
