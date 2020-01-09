@@ -20,7 +20,7 @@ router.get("/trees", (req, res, next) => {
 
 router.post("/trees", sellerAuth, (req, res, next) => {
   const { user } = req;
-  const body = { ...req.body };
+  const body = { ...req.body, sellerId: user.id };
 
   if (!body.type || !body.price) {
     res.status(400).send({
@@ -68,8 +68,36 @@ router.put("/tree/:id", sellerAuth, (req, res, next) => {
       } else {
         res.status(400).send({
           error_code: 6,
-          message:
-            "This is not your post and you are not authorized to edit this"
+          message: "You are not allowed to edit this post"
+        });
+      }
+    })
+    .catch(err =>
+      res.status(500).send({
+        error_code: 0,
+        message: "Something went wrong with the server"
+      })
+    );
+});
+
+router.delete("/tree/:id", sellerAuth, (req, res, next) => {
+  const { user } = req;
+
+  Tree.findByPk(req.params.id)
+    .then(tree => {
+      if (tree.sellerId === user.id && !tree.buyerId) {
+        Tree.destroy({ where: { id: req.params.id } })
+          .then(number => res.send({ number }))
+          .catch(err =>
+            res.status(500).send({
+              error_code: 0,
+              message: "Something went wrong with the server"
+            })
+          );
+      } else {
+        res.status(400).send({
+          error_code: 7,
+          message: "You are not allowed to delete this post"
         });
       }
     })
