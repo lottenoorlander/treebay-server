@@ -19,10 +19,6 @@ const Tree = sequelize.define(
     locationY: {
       type: Sequelize.FLOAT,
       allowNull: true
-    },
-    price: {
-      type: Sequelize.DECIMAL,
-      allowNull: false
     }
   },
 
