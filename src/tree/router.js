@@ -18,7 +18,7 @@ router.get("/trees", (req, res, next) => {
     );
 });
 
-router.post("/trees", (req, res, next) => {
+router.post("/trees", auth, (req, res, next) => {
   //   const { user } = req;
   const body = { ...req.body };
 
@@ -38,5 +38,16 @@ router.post("/trees", (req, res, next) => {
       );
   }
 });
+
+router.get("/tree/:id", (req, res, next) =>
+  Tree.findByPk(req.params.id)
+    .then(tree => res.send(tree))
+    .catch(err =>
+      res.status(500).send({
+        error_code: 0,
+        message: "Something went wrong"
+      })
+    )
+);
 
 module.exports = router;
