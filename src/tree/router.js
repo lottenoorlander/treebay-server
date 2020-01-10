@@ -2,10 +2,11 @@ const { Router } = require("express");
 const Tree = require("./model");
 const buyerAuth = require("../auth/buyerAuth");
 const sellerAuth = require("../auth/sellerAuth");
+const Seller = require("../seller/model");
 router = new Router();
 
 router.get("/trees", (req, res, next) => {
-  const limit = req.query.limit || 0;
+  const limit = req.query.limit || 25;
   const offset = req.query.offset || 0;
 
   return Tree.findAndCountAll({ where: { buyerId: null }, limit, offset })
