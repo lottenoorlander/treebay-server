@@ -1,17 +1,17 @@
 const { Router } = require("express");
 const bcrypt = require("bcrypt");
-const User = require("./model");
-const auth = require("../auth/middleware");
+const Buyer = require("./model");
+const auth = require("../auth/buyerAuth");
 const router = new Router();
 
-router.post("/user", (req, res, next) => {
+router.post("/buyer", (req, res, next) => {
   if (!req.body.username || !req.body.password) {
     res.status(400).send({
       error_code: 1,
       message: "Please supply a valid username and password"
     });
   } else {
-    User.findOne({
+    Buyer.findOne({
       where: {
         username: req.body.username
       }
@@ -28,7 +28,7 @@ router.post("/user", (req, res, next) => {
             password: bcrypt.hashSync(req.body.password, 10)
           };
 
-          User.create(user)
+          Buyer.create(user)
             .then(user => res.send(user))
             .catch(error =>
               res.status(500).send({
@@ -47,10 +47,10 @@ router.post("/user", (req, res, next) => {
   }
 });
 
-router.put("/user", auth, (req, res, next) => {
+router.put("/buyer", auth, (req, res, next) => {
   const { user } = req;
 
-  User.findByPk(user.id)
+  Buyer.findByPk(user.id)
     .then(user => {
       user
         .update(req.body)
@@ -70,10 +70,10 @@ router.put("/user", auth, (req, res, next) => {
     );
 });
 
-router.delete("/user", auth, (req, res, next) => {
+router.delete("/buyer", auth, (req, res, next) => {
   const { user } = req;
 
-  User.findByPk(user.id)
+  Buyer.findByPk(user.id)
     .then(user => {
       User.destroy({ where: { id: user.id } })
         .then(number => res.send({ number }))

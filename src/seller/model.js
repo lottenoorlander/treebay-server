@@ -1,8 +1,8 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../db");
 
-const User = sequelize.define(
-  "user",
+const Seller = sequelize.define(
+  "seller",
   {
     username: {
       type: Sequelize.STRING,
@@ -15,8 +15,8 @@ const User = sequelize.define(
   },
   {
     timestamps: false,
-    tableName: "users"
+    tableName: "sellers"
   }
 );
 
-module.exports = User;
+module.exports = Seller;
