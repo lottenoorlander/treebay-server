@@ -31,7 +31,8 @@ router.post("/login", (req, res, next) => {
           res.send({
             jwt: toJWT({ userId: entity.id }),
             user: entity.username,
-            id: entity.id
+            id: entity.id,
+            isSeller: true
           });
         } else {
           res.status(400).send({
@@ -63,7 +64,8 @@ router.post("/login", (req, res, next) => {
           res.send({
             jwt: toJWT({ userId: entity.id }),
             user: entity.username,
-            id: entity.id
+            id: entity.id,
+            isSeller: false
           });
         } else {
           res.status(400).send({
