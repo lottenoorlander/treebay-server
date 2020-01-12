@@ -32,7 +32,8 @@ router.post("/login", (req, res, next) => {
             jwt: toJWT({ userId: entity.id }),
             user: entity.username,
             id: entity.id,
-            isSeller: true
+            isSeller: true,
+            stripeCode: entity.stripeCode
           });
         } else {
           res.status(400).send({

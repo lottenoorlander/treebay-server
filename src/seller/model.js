@@ -11,10 +11,6 @@ const Seller = sequelize.define(
     password: {
       type: Sequelize.STRING,
       allowNull: false
-    },
-    stripeCode: {
-      type: Sequelize.STRING,
-      allowNull: true
     }
   },
   {

@@ -4,6 +4,7 @@ const buyerRouter = require("./buyer/router");
 const sellerRouter = require("./seller/router");
 const authRouter = require("./auth/router");
 const treeRouter = require("./tree/router");
+const paymentRouter = require("./payments/router");
 const port = process.env.PORT || 4000;
 
 const cors = require("cors");
@@ -19,5 +20,6 @@ app.use(sellerRouter);
 app.use(buyerRouter);
 app.use(authRouter);
 app.use(treeRouter);
+app.use(paymentRouter);
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));

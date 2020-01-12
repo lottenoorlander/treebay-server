@@ -2,7 +2,7 @@ const { Router } = require("express");
 const bcrypt = require("bcrypt");
 const Seller = require("./model");
 const auth = require("../auth/sellerAuth");
-const { toData } = require("../auth/jwt");
+
 const router = new Router();
 
 router.post("/seller", (req, res, next) => {
@@ -86,30 +86,6 @@ router.delete("/seller", auth, (req, res, next) => {
         message: "Something went wrong with the server"
       })
     );
-});
-
-router.get("/seller/onboarding", (req, res, next) => {
-  const stripeCode = req.query.code;
-  const userCode = req.query.state;
-  const data = toData(userCode);
-
-  Seller.findByPk(data.userId).then(user => {
-    if (!user) {
-      return next("User does not exist");
-    } else {
-      user
-        .update({ stripeCode: stripeCode })
-        .then(seller =>
-          res.redirect("http://localhost:3000/seller/account/finishedsignup")
-        )
-        .catch(err =>
-          res.status(500).send({
-            error_code: 0,
-            message: "Something went wrong with the server"
-          })
-        );
-    }
-  });
 });
 
 module.exports = router;
