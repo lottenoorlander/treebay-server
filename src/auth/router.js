@@ -4,6 +4,7 @@ const router = new Router();
 const bcrypt = require("bcrypt");
 const Buyer = require("../buyer/model");
 const Seller = require("../seller/model");
+const Payment = require("../payments/model");
 
 router.post("/login", (req, res, next) => {
   const username = req.body.username;
@@ -19,7 +20,8 @@ router.post("/login", (req, res, next) => {
     Seller.findOne({
       where: {
         username: req.body.username
-      }
+      },
+      include: [Payment]
     })
       .then(entity => {
         if (!entity) {
@@ -33,7 +35,7 @@ router.post("/login", (req, res, next) => {
             user: entity.username,
             id: entity.id,
             isSeller: true,
-            stripeCode: entity.stripeCode
+            stripeCode: entity.payment
           });
         } else {
           res.status(400).send({
