@@ -11,7 +11,7 @@ router.post("/login", (req, res, next) => {
   const isSeller = req.body.isSeller;
 
   if (!username || !password) {
-    rses.status(400).send({
+    res.status(400).send({
       error_code: 3,
       message: "Please supply a valid username and password"
     });
