@@ -11,12 +11,17 @@ router.get("/seller", auth, (req, res, next) => {
   const { user } = req;
   Seller.findOne({
     where: { id: user.id },
-    include: [{ model: Payment }, { model: Tree }]
+    include: [{ model: Payment }]
   }).then(user => {
     if (!user) {
       res.status(400).send({ error_code: 8, message: "User doesn't exist" });
     } else {
-      res.send(user);
+      res.send({
+        user: user.username,
+        id: user.id,
+        isSeller: true,
+        stripeCode: user.payment
+      });
     }
   });
 });
