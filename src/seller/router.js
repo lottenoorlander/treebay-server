@@ -2,7 +2,19 @@ const { Router } = require("express");
 const bcrypt = require("bcrypt");
 const Seller = require("./model");
 const auth = require("../auth/sellerAuth");
+
 const router = new Router();
+
+router.get("/seller", auth, (req, res, next) => {
+  const { user } = req;
+  Seller.findOne({ where: { id: user.id } }).then(user => {
+    if (!user) {
+      res.status(400).send({ error_code: 8, message: "User doesn't exist" });
+    } else {
+      res.send(user);
+    }
+  });
+});
 
 router.post("/seller", (req, res, next) => {
   if (!req.body.username || !req.body.password) {
