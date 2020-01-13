@@ -37,7 +37,7 @@ router.get("/seller/stripedashboard", sellerAuth, (req, res, next) => {
     return stripe.accounts.createLoginLink(
       CONNECTED_STRIPE_ACCOUNT_ID,
       function(err, link) {
-        err ? res.status(500).send({ err }) : res.send(link.url);
+        err ? res.status(500).send({ err }) : res.send(link);
       }
     );
   });
