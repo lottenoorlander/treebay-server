@@ -4,6 +4,23 @@ const Buyer = require("./model");
 const auth = require("../auth/buyerAuth");
 const router = new Router();
 
+router.get("/buyer", auth, (req, res, next) => {
+  const { user } = req;
+  Buyer.findOne({
+    where: { id: user.id }
+  }).then(user => {
+    if (!user) {
+      res.status(400).send({ error_code: 8, message: "User doesn't exist" });
+    } else {
+      res.send({
+        user: user.username,
+        id: user.id,
+        isSeller: false
+      });
+    }
+  });
+});
+
 router.post("/buyer", (req, res, next) => {
   if (!req.body.username || !req.body.password) {
     res.status(400).send({
