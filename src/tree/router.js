@@ -3,7 +3,7 @@ const Tree = require("./model");
 const buyerAuth = require("../auth/buyerAuth");
 const sellerAuth = require("../auth/sellerAuth");
 const Seller = require("../seller/model");
-const stripe = require("stripe")("sk_test_bh2V3QdidZqlMdH3PlNQOlja00WYLW4ylE");
+const request = require("superagent");
 router = new Router();
 
 router.get("/trees", (req, res, next) => {
@@ -23,10 +23,26 @@ router.get("/trees", (req, res, next) => {
 router.post("/trees", sellerAuth, async (req, res, next) => {
   const { user } = req;
   const body = { ...req.body, sellerId: user.id };
-  if (!body.type || !body.price) {
+
+  const address = body.location.replace(/ /g, "+");
+  console.log(address);
+  const locationInfo = await request.get(
+    `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=AIzaSyAOis1sZ9s2092YSGZ3EyeRnB0VWi3wzX0`
+  );
+  body.locationY = locationInfo.body.results[0].geometry.location.lng;
+  body.locationX = locationInfo.body.results[0].geometry.location.lat;
+
+  if (
+    !body.type ||
+    !body.price ||
+    !body.description ||
+    !body.img ||
+    !body.locationY ||
+    !body.locationX
+  ) {
     res.status(400).send({
       error_code: 5,
-      message: "Please provide a type and price for the tree"
+      message: "Please fill in all items"
     });
   } else {
     Tree.create(body)
