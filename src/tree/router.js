@@ -3,6 +3,7 @@ const Tree = require("./model");
 const buyerAuth = require("../auth/buyerAuth");
 const sellerAuth = require("../auth/sellerAuth");
 const Seller = require("../seller/model");
+const stripe = require("stripe")("sk_test_bh2V3QdidZqlMdH3PlNQOlja00WYLW4ylE");
 router = new Router();
 
 router.get("/trees", (req, res, next) => {
@@ -19,10 +20,9 @@ router.get("/trees", (req, res, next) => {
     );
 });
 
-router.post("/trees", sellerAuth, (req, res, next) => {
+router.post("/trees", sellerAuth, async (req, res, next) => {
   const { user } = req;
   const body = { ...req.body, sellerId: user.id };
-
   if (!body.type || !body.price) {
     res.status(400).send({
       error_code: 5,
