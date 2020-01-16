@@ -44,6 +44,11 @@ router.post("/trees", sellerAuth, async (req, res, next) => {
       error_code: 5,
       message: "Please fill in all items"
     });
+  } else if (body.img.length >= 250) {
+    res.status(400).send({
+      error_code: 8,
+      message: "Your image url is too long"
+    });
   } else {
     Tree.create(body)
       .then(tree => res.send(tree))
@@ -57,7 +62,9 @@ router.post("/trees", sellerAuth, async (req, res, next) => {
 });
 
 router.get("/tree/:id", (req, res, next) =>
-  Tree.findByPk(req.params.id)
+  Tree.findByPk(req.params.id, {
+    include: [{ model: Seller, attributes: ["username"] }]
+  })
     .then(tree => res.send(tree))
     .catch(err =>
       res.status(500).send({
