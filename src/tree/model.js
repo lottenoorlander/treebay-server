@@ -17,11 +17,23 @@ const Tree = sequelize.define(
     },
     locationX: {
       type: Sequelize.FLOAT,
-      allowNull: true
+      allowNull: false
     },
     locationY: {
       type: Sequelize.FLOAT,
+      allowNull: false
+    },
+    description: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    name: {
+      type: Sequelize.STRING,
       allowNull: true
+    },
+    img: {
+      type: Sequelize.STRING,
+      allowNull: false
     }
   },
 
