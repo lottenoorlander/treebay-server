@@ -22,7 +22,9 @@ router.get("/seller/onboarding", (req, res, next) => {
       Payments.create({ ...response, sellerId: userId });
     })
     .then(seller =>
-      res.redirect("http://localhost:3000/seller/account/finishedsignup")
+      res.redirect(
+        "https://competent-fermi-36d257.netlify.com/seller/account/finishedsignup"
+      )
     )
     .catch(error =>
       res.status(500).send({
@@ -68,8 +70,8 @@ router.post("/checkout", buyerAuth, async (req, res, next) => {
       payment_intent_data: {
         application_fee_amount: 200
       },
-      success_url: `http://localhost:4000/success?id=${req.body.id}&buyer=${req.user.id}`,
-      cancel_url: `http://localhost:4000/cancel?id=${req.body.id}`
+      success_url: `https://competent-fermi-36d257.netlify.com/success?id=${req.body.id}&buyer=${req.user.id}`,
+      cancel_url: `https://competent-fermi-36d257.netlify.com/cancel?id=${req.body.id}`
     },
     {
       stripeAccount: stripeAccount
@@ -85,7 +87,11 @@ router.get("/success", (req, res, next) => {
   Tree.findOne({ where: { id: id } }).then(tree =>
     tree
       .update({ buyerId: buyer })
-      .then(tree => res.redirect(`http://localhost:3000/trees/${id}/success`))
+      .then(tree =>
+        res.redirect(
+          `https://competent-fermi-36d257.netlify.com/trees/${id}/success`
+        )
+      )
       .catch(error =>
         res.status(500).send({
           error_code: error.error,
@@ -97,7 +103,9 @@ router.get("/success", (req, res, next) => {
 
 router.get("/cancel", (req, res, next) => {
   // req.id is the tree that needs to be updated as not being reserved anymore
-  res.redirect(`http://localhost:3000/trees/${req.query.id}/cancel`);
+  res.redirect(
+    `https://competent-fermi-36d257.netlify.com/trees/${req.query.id}/cancel`
+  );
 });
 
 module.exports = router;
